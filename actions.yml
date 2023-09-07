@@ -1,1 +1,60 @@
+name: 'deploy to ecs'
+description: 'deploy to ecs'
+inputs:
+  task_name:
+    description: >
+      ecs task name
+    required: true
+    type: string
+  container_name:
+    description: >
+      ecs task container name
+    default: ''
+    required: true
+    type: string
+  image_name:
+    description: >
+      image name
+    default: ''
+    required: true
+    type: string
+  cluster_name:
+    description: >
+      ecs cluster name
+    default: ''
+    required: true
+    type: string
+  ecs_service_name:
+    description: >
+      ecs service name
+    default: ''
+    required: true
+    type: string
 
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ env.AWS-ROLE-TO-ASSUME }}
+        role-skip-session-tagging: true
+        role-duration-seconds: 1380
+        aws-region: ${{ env.AWS-REGION }} 
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition ${{ inputs.task_name }} --query taskDefinition > task-definition.json
+    - name: Render Amazon ECS task definition
+      id: render
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: ${{ inputs.container_name }}
+        image: ${{ inputs.image_name }}
+        environment-variables: "LOG_LEVEL=info"
+    - name: Deploy to Amazon ECS service
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.render.outputs.task-definition }}
+        service: ${{ inputs.ecs_service_name }}
+        cluster: ${{ inputs.cluster_name }}
