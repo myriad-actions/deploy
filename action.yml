@@ -30,17 +30,28 @@ inputs:
     default: ''
     required: true
     type: string
+  config-path:
+    description: >-
+      path to the ecr.json file which stores the variables for the instance
+    required: false
+    default: ".github/ecr.json"
+    type: string
 
 runs:
   using: "composite"
   steps:
+    - name: load variables
+      id: load-vars
+      uses: myriad-actions/load-variables@v1
+      with:
+        config-path: ${{ inputs.config-path }}
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: ${{ env.AWS-ROLE-TO-ASSUME }}
+        role-to-assume: ${{ fromJson(steps.load-vars.outputs.vars).role-to-assume }}
         role-skip-session-tagging: true
         role-duration-seconds: 1380
-        aws-region: ${{ env.AWS-REGION }} 
+        aws-region: ${{ fromJson(steps.load-vars.outputs.vars).aws-region }}
     - name: Download task definition
       run: |
         aws ecs describe-task-definition --task-definition ${{ inputs.task_name }} --query taskDefinition > task-definition.json
@@ -48,6 +59,7 @@ runs:
       id: render
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
+        env-path: ${{ inputs.env-path }}
         task-definition: task-definition.json
         container-name: ${{ inputs.container_name }}
         image: ${{ inputs.image_name }}
