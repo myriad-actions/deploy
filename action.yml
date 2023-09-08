@@ -55,6 +55,7 @@ runs:
     - name: Download task definition
       run: |
         aws ecs describe-task-definition --task-definition ${{ inputs.task_name }} --query taskDefinition --region ${{ fromJson(steps.load-vars.outputs.vars).aws-region }} > task-definition.json
+      shell: bash
     - name: Render Amazon ECS task definition
       id: render
       uses: aws-actions/amazon-ecs-render-task-definition@v1
