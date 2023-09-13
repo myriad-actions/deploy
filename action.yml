@@ -44,6 +44,7 @@ runs:
       run: |
         ls -la ${{ github.workspace }}/.github
         ls -la ./.github
+      shell: bash
     - name: load variables
       id: load-vars
       uses: myriad-actions/load-variables@v2
