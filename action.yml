@@ -40,6 +40,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: check ecr file
+      run: |
+        ls -la ${{ github.workspace }}/.github
+        ls -la ./.github
     - name: load variables
       id: load-vars
       uses: myriad-actions/load-variables@v2
