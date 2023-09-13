@@ -42,7 +42,7 @@ runs:
   steps:
     - name: check ecr file
       run: |
-        ls -la "${{ github.workspace }}/.github"
+        ls -la "${{ github.workspace }}"
         ls -la ./.github
       shell: bash
     - name: load variables
