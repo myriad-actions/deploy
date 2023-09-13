@@ -42,8 +42,7 @@ runs:
   steps:
     - name: check ecr file
       run: |
-        ls -la "${{ github.workspace }}"
-        ls -la ./.github
+        ls -la
       shell: bash
     - name: load variables
       id: load-vars
