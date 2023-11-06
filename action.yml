@@ -34,7 +34,7 @@ inputs:
     description: >-
       path to the ecr.json file which stores the variables for the instance
     required: false
-    default: "./main/.github/ecr.json"
+    default: "./.github/ecr.json"
     type: string
 
 runs:
