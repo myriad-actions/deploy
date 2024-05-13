@@ -62,7 +62,7 @@ runs:
       shell: bash
     - name: Render Amazon ECS task definition
       id: render
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      uses: aws-actions/amazon-ecs-render-task-definition@v1.3.0
       with:
         env-path: ${{ inputs.env-path }}
         task-definition: task-definition.json
