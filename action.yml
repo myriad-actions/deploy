@@ -70,7 +70,7 @@ runs:
         image: ${{ inputs.image_name }}
         environment-variables: "LOG_LEVEL=info"
     - name: Deploy to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1.4.10
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1.4.11
       with:
         task-definition: ${{ steps.render.outputs.task-definition }}
         service: ${{ inputs.ecs_service_name }}
