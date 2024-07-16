@@ -64,7 +64,6 @@ runs:
       id: render
       uses: aws-actions/amazon-ecs-render-task-definition@v1.2.0
       with:
-        env-path: ${{ inputs.env-path }}
         task-definition: task-definition.json
         container-name: ${{ inputs.container_name }}
         image: ${{ inputs.image_name }}
